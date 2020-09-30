@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema xmlns:tns="http://teamcenter.com/Schemas/Soa/2006-03/Exceptions" targetNamespace="http://teamcenter.com/Schemas/Soa/2006-03/Exceptions" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:annotation>
+    <xsd:documentation>
+              Teamcenter SOA (2006-03)
+             This schema contains elements used as SOAP Faults 
+          </xsd:documentation>
+  </xsd:annotation>
+  <xsd:element name="InvalidUserFault" type="tns:InvalidUserException" />
+  <xsd:complexType name="InvalidUserException">
+    <xsd:annotation>
+      <xsd:documentation>
+                This exception is thrown when the user has not been validated and 
+                therefore a session does not exist between the client and server. 
+                This exception will be included on signature of every service operation 
+                exposed to the client.
+             </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="message" type="xsd:string" />
+      <xsd:element name="code" type="xsd:integer" />
+      <xsd:element name="level" type="xsd:integer" />
+      <xsd:element name="tcResponse" type="xsd:string" />
+    </xsd:sequence>
+    <xsd:attribute name="ssoServerURL" type="xsd:string" use="optional">
+      <xsd:annotation>
+        <xsd:documentation><![CDATA[
+                    As of Teamcenter server 12.0. The URL of the SSO server. This is only set when the system is configured in SSO mode.
+                ]]></xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="ssoAppID" type="xsd:string" use="optional">
+      <xsd:annotation>
+        <xsd:documentation><![CDATA[
+                    As of Teamcenter server 12.0. The Application ID for SSO authentication. This is only set when the system is configured in SSO mode.
+                ]]></xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+  </xsd:complexType>
+  <xsd:element name="InvalidCredentialsFault" type="tns:InvalidCredentialsException" />
+  <xsd:complexType name="InvalidCredentialsException">
+    <xsd:annotation>
+      <xsd:documentation>
+                This exception is thrown when the supplied credentials are not valid.
+                This exception will only be included on signature of login operations.
+            </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="message">
+        <xsd:complexType>
+          <xsd:simpleContent>
+            <xsd:extension base="xsd:string">
+              <xsd:attribute name="code" type="xsd:integer" use="optional" />
+              <xsd:attribute name="level" type="xsd:integer" use="optional" />
+            </xsd:extension>
+          </xsd:simpleContent>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+    <xsd:attribute name="ssoServerURL" type="xsd:string" use="optional">
+      <xsd:annotation>
+        <xsd:documentation><![CDATA[
+                    As of Teamcenter server 12.0. The URL of the SSO server. This is only set when the system is configured in SSO mode.
+                ]]></xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="ssoAppID" type="xsd:string" use="optional">
+      <xsd:annotation>
+        <xsd:documentation><![CDATA[
+                    As of Teamcenter server 12.0. The Application ID for SSO authentication. This is only set when the system is configured in SSO mode.
+                ]]></xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+  </xsd:complexType>
+  <xsd:element name="InternalServerFault" type="tns:InternalServerException" />
+  <xsd:complexType name="InternalServerException">
+    <xsd:annotation>
+      <xsd:documentation>
+                The internal server exception is used to catch any exceptions while 
+                processing a service across the different tiers. This exception will 
+                be included on signature of every service operation exposed to the client.
+            </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" name="messages">
+        <xsd:complexType>
+          <xsd:simpleContent>
+            <xsd:extension base="xsd:string">
+              <xsd:attribute name="code" type="xsd:integer" use="optional" />
+              <xsd:attribute name="level" type="xsd:integer" use="optional" />
+            </xsd:extension>
+          </xsd:simpleContent>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="ConnectionFault" type="tns:ConnectionException" />
+  <xsd:complexType name="ConnectionException">
+    <xsd:annotation>
+      <xsd:documentation>
+               The Connection exception is used to catch any network or I/O
+               errors while marshalling a service request. These exception
+               usually be recovered from, that is after the problem with the 
+               network has been fixed, the last service request can be retried.            
+            </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexContent mixed="false">
+      <xsd:extension base="tns:InternalServerException" />
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="ProtocolFault" type="tns:ProtocolException" />
+  <xsd:complexType name="ProtocolException">
+    <xsd:annotation>
+      <xsd:documentation>
+               The Protocol excetpion is used to catch and errors in the content
+               of a service request. These errors are generally a result of a 
+               programming error and can not be recovered from.  
+            </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexContent mixed="false">
+      <xsd:extension base="tns:InternalServerException" />
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="ServiceFault" type="tns:ServiceException" />
+  <xsd:complexType name="ServiceException">
+    <xsd:annotation>
+      <xsd:documentation>
+            The ServiceException type is used to return an error from a service.
+            </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" name="messages">
+        <xsd:complexType>
+          <xsd:simpleContent>
+            <xsd:extension base="xsd:string">
+              <xsd:attribute name="code" type="xsd:integer" use="optional" />
+              <xsd:attribute name="level" type="xsd:integer" use="optional" />
+            </xsd:extension>
+          </xsd:simpleContent>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+    <xsd:attribute name="uid" type="xsd:string" use="optional" />
+    <xsd:attribute name="clientId" type="xsd:string" use="optional" />
+  </xsd:complexType>
+</xsd:schema>

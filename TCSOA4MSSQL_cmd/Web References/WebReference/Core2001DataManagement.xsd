@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema xmlns:tns="http://teamcenter.com/Schemas/Core/2020-01/DataManagement" xmlns:soa="http://teamcenter.com/Schemas/Soa/2006-03/Base" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://teamcenter.com/Schemas/Core/2020-01/DataManagement" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:import schemaLocation="SoaBase.xsd" namespace="http://teamcenter.com/Schemas/Soa/2006-03/Base" />
+  <xsd:complexType name="IDContextOut">
+    <xsd:annotation>
+      <xsd:documentation><![CDATA[
+                The IDContextOut is list of  <b>IdContext</b> objects. It also contains the input object of type <b>Item</b> or <b>ItemRevision</b>.
+            ]]></xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="inputObj" type="soa:ModelObject">
+        <xsd:annotation>
+          <xsd:documentation><![CDATA[
+                        Input object of type <b>WorkspaceObject</b> or null for which the list of <b>IdContext</b> objects are fetched.
+                    ]]></xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="idContexts" type="soa:ModelObject">
+        <xsd:annotation>
+          <xsd:documentation><![CDATA[
+                        A list of all <b>IdContext</b> objects found in the Teamcenter database.
+                    ]]></xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="IDContextOutput">
+    <xsd:complexType>
+      <xsd:annotation>
+        <xsd:documentation><![CDATA[
+                The IDContextOutput is list of IdContextOut objects. It also contains the instance of ServiceData for the operation.
+            ]]></xsd:documentation>
+      </xsd:annotation>
+      <xsd:sequence>
+        <xsd:element minOccurs="0" maxOccurs="unbounded" name="idContextOuts" type="tns:IDContextOut">
+          <xsd:annotation>
+            <xsd:documentation><![CDATA[
+                        A list of IdContextOut structures which holds the list of <b>IdContext</b> objects and input object of type <b>WorkspaceObject</b> or null.
+                    ]]></xsd:documentation>
+          </xsd:annotation>
+        </xsd:element>
+        <xsd:element ref="soa:ServiceData">
+          <xsd:annotation>
+            <xsd:documentation><![CDATA[
+                        Any partial errors encountered during this operation are returned in the list of partial errors of the ServiceData.
+                    ]]></xsd:documentation>
+          </xsd:annotation>
+        </xsd:element>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:complexType name="IDDispRuleCreateIn">
+    <xsd:annotation>
+      <xsd:documentation><![CDATA[
+                The IDDispRuleCreateIn structure is used to hold the name of the ID Display Rule, list of ID Context objects and a flag whether to set the ID Display Rule being created as the default ID Display Rule.
+            ]]></xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="idContexts" type="soa:ModelObject">
+        <xsd:annotation>
+          <xsd:documentation><![CDATA[
+                        A list of input <b>IdContext</b> objects to be set with the <b>IdDispRule</b> object being created.
+                    ]]></xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+    <xsd:attribute name="ruleName" type="xsd:string" use="required">
+      <xsd:annotation>
+        <xsd:documentation><![CDATA[
+                    Name of the ID Display Rule being created.
+                ]]></xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="useDefault" type="xsd:boolean" use="required">
+      <xsd:annotation>
+        <xsd:documentation><![CDATA[
+                    If true, the created <b>IdDispRule</b> object is set as the default ID Display Rule for the user; otherwise, the existing default ID Display Rule will remain the default.
+                ]]></xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="setCurrent" type="xsd:boolean" use="required">
+      <xsd:annotation>
+        <xsd:documentation><![CDATA[
+                    If true, the created <b>IdDispRule</b> object is set as the current ID Display Rule for the user; otherwise, the existing current ID Display Rule will remain the current.
+                ]]></xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+  </xsd:complexType>
+  <xsd:complexType name="IdentifiersOut">
+    <xsd:annotation>
+      <xsd:documentation><![CDATA[
+                The IdentifiersOut structure is used to hold the list of <b>Identifier</b> types, applicable object of type <b>Item</b> and list of <b>ItemRevision</b> objects, applicable for defining the Alternate IDs.
+            ]]></xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="inputItemOrRev" type="soa:ModelObject">
+        <xsd:annotation>
+          <xsd:documentation><![CDATA[
+                        Input <b>Item</b> or ItemRevision object for which the <b>Identifier</b> type is being fetched.
+                    ]]></xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="identifierTypes" type="soa:ModelObject">
+        <xsd:annotation>
+          <xsd:documentation><![CDATA[
+                        A list of valid <b>Identifier</b> types which can be used to define the Alternate and Alias IDs of the input object.
+                    ]]></xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="item" type="soa:ModelObject">
+        <xsd:annotation>
+          <xsd:documentation><![CDATA[
+                        <b>Item</b> object of the given input <b>ItemRevision</b> for which Alternate IDs can be defined.
+                    ]]></xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="revisions" type="soa:ModelObject">
+        <xsd:annotation>
+          <xsd:documentation><![CDATA[
+                        A list containing all revisions of the input <b>Item</b> for which Alternate IDs can be defined.
+                    ]]></xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="IdentifierTypesIn">
+    <xsd:annotation>
+      <xsd:documentation><![CDATA[
+                The IdentifierTypesIn structure is used to hold the input <b>Item</b> or <b>ItemRevision</b> object and the input <b>IdContext</b> object.
+            ]]></xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="inputItemOrRev" type="soa:ModelObject">
+        <xsd:annotation>
+          <xsd:documentation><![CDATA[
+                        Input <b>Item</b> or <b>ItemRevision</b> object for which the <b>Identifier</b> type is being fetched.
+                    ]]></xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="idContext" type="soa:ModelObject">
+        <xsd:annotation>
+          <xsd:documentation><![CDATA[
+                        Input <b>IdContext</b> object used to fetch the <b>Identifier</b> type for the input <b>Item</b> or <b>ItemRevision</b> from the defined ID Display Rules.
+                    ]]></xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="IdentifierTypesOut">
+    <xsd:complexType>
+      <xsd:annotation>
+        <xsd:documentation><![CDATA[
+                The IdentifierTypesOut is list of IdentifiersOut objects. It also contains the instance of ServiceData for the operation.
+            ]]></xsd:documentation>
+      </xsd:annotation>
+      <xsd:sequence>
+        <xsd:element minOccurs="0" maxOccurs="unbounded" name="identifiersOutput" type="tns:IdentifiersOut">
+          <xsd:annotation>
+            <xsd:documentation><![CDATA[
+                        A list of IdentifiersOut structures which holds list of <b>Identifier</b> types, object of type <b>Item</b> and list of <b>ItemRevision</b> objects, applicable for defining the Alternate IDs.
+                    ]]></xsd:documentation>
+          </xsd:annotation>
+        </xsd:element>
+        <xsd:element ref="soa:ServiceData">
+          <xsd:annotation>
+            <xsd:documentation><![CDATA[
+                        Any partial errors encountered during this operation are returned in the list of partial errors of the ServiceData.
+                    ]]></xsd:documentation>
+          </xsd:annotation>
+        </xsd:element>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="CreateIdDisplayRulesInput">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element minOccurs="0" maxOccurs="unbounded" name="idDispRuleCreIns" type="tns:IDDispRuleCreateIn">
+          <xsd:annotation>
+            <xsd:documentation><![CDATA[
+                        A list of objects of type IdDispRuleCreateIn. The data on IdDispRuleCreateIn is used to create the <b>IdContextRule</b> objects with input name and ID contexts.
+                    ]]></xsd:documentation>
+          </xsd:annotation>
+        </xsd:element>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="GetIdentifierTypesInput">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element minOccurs="0" maxOccurs="unbounded" name="identifierTypesIn" type="tns:IdentifierTypesIn">
+          <xsd:annotation>
+            <xsd:documentation><![CDATA[
+                        A list of objects of type IdentifierTypesIn. The data on IdentifierTypesIn is used to query <b>Identifer</b> type based on input <b>Item</b> or <b>ItemRevision</b> and <b>IdContext</b>.
+                    ]]></xsd:documentation>
+          </xsd:annotation>
+        </xsd:element>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="GetIdContextsInput">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element minOccurs="0" maxOccurs="unbounded" name="inputObjs" type="soa:ModelObject">
+          <xsd:annotation>
+            <xsd:documentation><![CDATA[
+                        A list of objects of type <b>WorkspaceObject</b> or null for which the objects of type <b>IdContext</b> are fetched.
+                    ]]></xsd:documentation>
+          </xsd:annotation>
+        </xsd:element>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+</xsd:schema>

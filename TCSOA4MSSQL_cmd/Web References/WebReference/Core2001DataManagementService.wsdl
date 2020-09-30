@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:imp3="http://teamcenter.com/webservices/2005-06/schemas/WSFaults" xmlns:imp2="http://teamcenter.com/Schemas/Core/2020-01/DataManagement" xmlns:tns="http://teamcenter.com/Services/Core/2020-01" xmlns:imp0="http://teamcenter.com/Schemas/Soa/2006-03/Base" xmlns:wsi="http://ws-i.org/schemas/conformanceClaim/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:imp1="http://teamcenter.com/Schemas/Soa/2006-03/Exceptions" xmlns="http://schemas.xmlsoap.org/wsdl/" targetNamespace="http://teamcenter.com/Services/Core/2020-01" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xs:schema>
+      <xs:import schemaLocation="SoaBase.xsd" namespace="http://teamcenter.com/Schemas/Soa/2006-03/Base" />
+      <xs:import schemaLocation="SoaExceptions.xsd" namespace="http://teamcenter.com/Schemas/Soa/2006-03/Exceptions" />
+      <xs:import schemaLocation="Core2001DataManagement.xsd" namespace="http://teamcenter.com/Schemas/Core/2020-01/DataManagement" />
+      <xs:import schemaLocation="WSFaults.xsd" namespace="http://teamcenter.com/webservices/2005-06/schemas/WSFaults" />
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="InternalServerFaultFault">
+    <wsdl:part name="exx01" element="imp1:InternalServerFault" />
+  </wsdl:message>
+  <wsdl:message name="InvalidUserFaultFault">
+    <wsdl:part name="exx02" element="imp1:InvalidUserFault" />
+  </wsdl:message>
+  <wsdl:message name="createIdDisplayRulesRequest">
+    <wsdl:part name="in0" element="imp2:CreateIdDisplayRulesInput" />
+  </wsdl:message>
+  <wsdl:message name="createIdDisplayRulesResponse">
+    <wsdl:part name="out" element="imp0:ServiceData" />
+  </wsdl:message>
+  <wsdl:message name="getIdentifierTypesRequest">
+    <wsdl:part name="in0" element="imp2:GetIdentifierTypesInput" />
+  </wsdl:message>
+  <wsdl:message name="getIdentifierTypesResponse">
+    <wsdl:part name="out" element="imp2:IdentifierTypesOut" />
+  </wsdl:message>
+  <wsdl:message name="getIdContextsRequest">
+    <wsdl:part name="in0" element="imp2:GetIdContextsInput" />
+  </wsdl:message>
+  <wsdl:message name="getIdContextsResponse">
+    <wsdl:part name="out" element="imp2:IDContextOutput" />
+  </wsdl:message>
+  <wsdl:portType name="Core2001DataManagement">
+    <wsdl:operation name="createIdDisplayRules">
+      <wsdl:documentation><![CDATA[
+        This operation creates the ID Display Rules (<b>IdDispRule</b>) with the input ID Context information.<br />ID Display Rule contains the list of ID Contexts and their order. Based on the order of the ID Contexts defined, the system evaluates the display name of the <b>Item</b> and <b>ItemRevision</b> from their Alternate IDs.<br /><br />ID Context (<b>IdContext</b>), represents the context information under which the OEM defines the unique IDs of their <b>Item</b> and <b>ItemRevision</b>. This context information is used when Teamcenter users define the unique IDs of <b>Item</b> and <b>ItemRevision</b> objects.<br /><br />User can set one of the ID Display Rules as the current ID Display Rule. The current ID Display Rule is used to evaluate the display names of the <b>Item</b> and <b>ItemRevision</b>. In case the ID Context of the Alternate ID with the <b>Item</b> and <b>ItemRevision</b> object does not match with that of the current ID Display Rule then system uses the default ID Display Rule to evaluate the display names of <b>Item</b> and <b>ItemRevision</b> objects.<br /><br /><b>Teamcenter Component:</b><br />Core Model General - This component provides a set of generic capabilities that form the very core of Teamcenter platform.
+        ]]></wsdl:documentation>
+      <wsdl:input name="createIdDisplayRulesRequest" message="tns:createIdDisplayRulesRequest" />
+      <wsdl:output name="createIdDisplayRulesResponse" message="tns:createIdDisplayRulesResponse" />
+      <wsdl:fault name="InternalServerFaultError" message="tns:InternalServerFaultFault" />
+      <wsdl:fault name="InvalidUserFaultError" message="tns:InvalidUserFaultFault" />
+    </wsdl:operation>
+    <wsdl:operation name="getIdentifierTypes">
+      <wsdl:documentation><![CDATA[
+        This operation fetches the applicable <b>Identifier</b> types for the input objects of type <b>Item</b> and/or <b>ItemRevision</b> along with the input <b>IdContext</b> object. System queries the ID Context Rules defined in Teamcenter database and retrives the <b>Identifier</b> types.<br /><br />Alternate and Alias IDs are defined in Teamcenter as instances of business object of type <b>Identifier</b>. ID Context, of business object type <b>IdContext</b>, represents the context information under which the OEM defines the unique IDs of their <b>Item</b> and <b>ItemRevision</b>. This context information is used when Teamcenter users define the Alternate and Alias IDs of <b>Item</b> and <b>ItemRevision</b> objects.<br /><br />ID Context Rules are defined as instances of business object type <b>IdContextRule</b> in Teamcenter database. These rules map the combination of ID Context and the object type e.g.  <b>Item</b> or <b>ItemRevision</b>, called Identifiable types, to the type of the <b>Identifier</b> applicable in the context.<br /><br />This operation also returns the other applicable objects for which Alternate IDs along with the input objects can be defined. In case of input objects of type <b>Item</b>, this operation returns the list of revision objects of the <b>Item</b>, and in case of input objects of type <b>ItemRevision</b>, this operation returns the <b>Item</b> object as the applicable object for which Alternate IDs can be defined.<br /><br /><b>Teamcenter Component:</b><br />Core Model General - This component provides a set of generic capabilities that form the very core of Teamcenter platform.
+        ]]></wsdl:documentation>
+      <wsdl:input name="getIdentifierTypesRequest" message="tns:getIdentifierTypesRequest" />
+      <wsdl:output name="getIdentifierTypesResponse" message="tns:getIdentifierTypesResponse" />
+      <wsdl:fault name="InternalServerFaultError" message="tns:InternalServerFaultFault" />
+      <wsdl:fault name="InvalidUserFaultError" message="tns:InvalidUserFaultFault" />
+    </wsdl:operation>
+    <wsdl:operation name="getIdContexts">
+      <wsdl:documentation><![CDATA[
+        This operation fetches all instances of the ID Context objects (<b>IdContext</b>) from the Teamcenter database applicable for the input objects of type <b>Item</b> and <b>ItemRevision</b> based on defined ID Context Rules (<b>IdContextRule</b>) by the system administrators.<br /><br />This operation queries ID Context Rule objects and fetches the ID Context objects based on the input <b>Item</b>, <b>ItemRevision</b> or null. The input is the identifiable type defined on the ID Context Rules. For a null input, it returns the Id Context objects where the identifiable type is null.<br />All ID Context objects from the Teamcenter data base are returned in case input object is other than <b>Item</b>, <b>ItemRevision</b> or null. An empty input list would also return all ID Context objects from the Teamcenter data base.<br /><br /><b>IdContext</b> objects represents the context information under which the OEM defines the unique IDs of their <b>Item</b> and <b>ItemRevision</b> objects. This context information is used when Teamcenter users define the unique IDs of <b>Item</b> and <b>ItemRevision</b> objects.<br /><br />Alternate and Alias IDs of Teamcenter are the example of the such unique IDs of <b>Item</b> and <b>ItemRevision</b>. Users define Alternate and Alias IDs with the help of the ID Context as one of the unique attribute of the ID.<br /><br /><b>Teamcenter Component:</b><br />Core Model General - This component provides a set of generic capabilities that form the very core of Teamcenter platform.
+        ]]></wsdl:documentation>
+      <wsdl:input name="getIdContextsRequest" message="tns:getIdContextsRequest" />
+      <wsdl:output name="getIdContextsResponse" message="tns:getIdContextsResponse" />
+      <wsdl:fault name="InternalServerFaultError" message="tns:InternalServerFaultFault" />
+      <wsdl:fault name="InvalidUserFaultError" message="tns:InvalidUserFaultFault" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="Core2001DataManagementSoapBinding" type="tns:Core2001DataManagement">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="createIdDisplayRules">
+      <soap:operation soapAction="createIdDisplayRules" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="InternalServerFaultError">
+        <soap:fault use="literal" name="InternalServerFaultError" namespace="" />
+      </wsdl:fault>
+      <wsdl:fault name="InvalidUserFaultError">
+        <soap:fault use="literal" name="InvalidUserFaultError" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getIdentifierTypes">
+      <soap:operation soapAction="getIdentifierTypes" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="InternalServerFaultError">
+        <soap:fault use="literal" name="InternalServerFaultError" namespace="" />
+      </wsdl:fault>
+      <wsdl:fault name="InvalidUserFaultError">
+        <soap:fault use="literal" name="InvalidUserFaultError" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getIdContexts">
+      <soap:operation soapAction="getIdContexts" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="InternalServerFaultError">
+        <soap:fault use="literal" name="InternalServerFaultError" namespace="" />
+      </wsdl:fault>
+      <wsdl:fault name="InvalidUserFaultError">
+        <soap:fault use="literal" name="InvalidUserFaultError" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="Core2001DataManagementService">
+    <wsdl:port name="Core-2020-01-DataManagement" binding="tns:Core2001DataManagementSoapBinding">
+      <soap:address location="http://localhost:80/PTierApp/WebServices/Core-2020-01-DataManagement" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

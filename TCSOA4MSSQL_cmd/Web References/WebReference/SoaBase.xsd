@@ -1,0 +1,444 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://teamcenter.com/Schemas/Soa/2006-03/Base" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://teamcenter.com/Schemas/Soa/2006-03/Base" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:annotation>
+    <xs:documentation>
+        This package defines the base types used in services defined under the 
+        Teamcenter SOA Framework. 
+        </xs:documentation>
+  </xs:annotation>
+  <xs:element name="ObjectPropertyPolicy">
+    <xs:complexType>
+      <xs:annotation>
+        <xs:documentation>
+                    This allows the client application to set the Object property Policy.
+                   </xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" name="modifiers" type="tns:Modifiers" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" name="types" type="tns:PolicyType" />
+      </xs:sequence>
+      <xs:attribute name="useRefCount" type="xs:boolean" use="optional" />
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="PolicyType">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="modifiers" type="tns:Modifiers" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="properties" type="tns:PolicyProperty" />
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string" use="required" />
+  </xs:complexType>
+  <xs:complexType name="PolicyProperty">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="modifiers" type="tns:Modifiers" />
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string" use="required" />
+  </xs:complexType>
+  <xs:complexType name="Modifiers">
+    <xs:attribute name="name" type="xs:string" use="required" />
+    <xs:attribute name="Value" type="xs:string" use="required" />
+  </xs:complexType>
+  <xs:element name="ServiceData">
+    <xs:complexType>
+      <xs:annotation>
+        <xs:documentation>
+            The ServiceData type is used to return Teamcenter Model object. 
+            Teamcenter Model objects are organized in 4 lists, 'updatedObjs', 'deletedObjs',
+            'createdObjs', and 'plainObjs'. The ServiceData type also allows partial
+            errors to be returned.
+            As of Teamcenter 9.1.2 and 10.1(??) the 'updated', 'deleted', 'created', and 'plain' arrays are used
+            with each element in the array being the UID of the object. 
+            </xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" name="updatedObjs" type="tns:RefId" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" name="deletedObjs" type="tns:RefId" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" name="createdObjs" type="tns:RefId" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" name="childChangeObjs" type="tns:RefId" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" name="plainObjs" type="tns:RefId" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" name="updated" type="xs:string" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" name="deleted" type="xs:string" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" name="created" type="xs:string" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" name="childChange" type="xs:string" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" name="plain" type="xs:string" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" name="dataObjects" type="tns:ModelObject" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" name="modelObjects" type="tns:ObjectMap">
+          <xs:annotation>
+            <xs:appinfo>
+              <xjb4c-type>hashmap</xjb4c-type>
+            </xs:appinfo>
+          </xs:annotation>
+        </xs:element>
+        <xs:element minOccurs="0" maxOccurs="unbounded" name="partialErrors" type="tns:ErrorStack" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="PartialErrors">
+    <xs:complexType>
+      <xs:annotation>
+        <xs:documentation>
+               The ServiceException type is used to return an error from a service.
+            </xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" name="errors" type="tns:ErrorStack" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ModelSchema">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" name="types" type="tns:ModelType" />
+        <xs:element minOccurs="0" maxOccurs="unbounded" name="classes" type="tns:ModelClass" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Preferences">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" name="prefs" type="tns:Preference" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="Preference">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="values" type="tns:PreferenceValue" />
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string" use="required" />
+    <xs:attribute name="scope" type="xs:string" use="required" />
+  </xs:complexType>
+  <xs:complexType name="ModelType">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="propDescriptor" type="tns:PropDescriptor" />
+    </xs:sequence>
+    <xs:attribute name="uid" type="xs:string" use="required" />
+    <xs:attribute name="name" type="xs:string" use="required" />
+    <xs:attribute name="uifName" type="xs:string" use="optional" />
+    <xs:attribute name="className" type="xs:string" use="required" />
+    <xs:attribute name="parentTypeName" type="xs:string" use="optional" />
+    <xs:attribute name="typeUid" type="xs:string" use="required" />
+    <xs:attribute name="transientType" type="xs:boolean" use="required" />
+    <xs:attribute name="externalObject" type="xs:boolean" use="required" />
+  </xs:complexType>
+  <xs:complexType name="ModelClass">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="attributes" type="tns:Attrib" />
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string" use="required" />
+    <xs:attribute name="parentClassName" type="xs:string" use="optional" />
+  </xs:complexType>
+  <xs:complexType name="PreferenceValue">
+    <xs:attribute name="value" type="xs:string" use="required" />
+  </xs:complexType>
+  <xs:complexType name="RefId">
+    <xs:attribute name="uid" type="xs:string" use="required" />
+  </xs:complexType>
+  <xs:complexType name="ObjectMap">
+    <xs:annotation>
+      <xs:appinfo>
+        <xjb4c-hashmap>
+          <key>uid</key>
+          <value>bo</value>
+        </xjb4c-hashmap>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="bo" type="tns:ModelObject" />
+    </xs:sequence>
+    <xs:attribute name="uid" type="xs:string" use="required" />
+  </xs:complexType>
+  <xs:complexType name="ModelObject">
+    <xs:annotation>
+      <xs:documentation>
+            The ModelObject type is used to represent any Teamcenter business object.
+             </xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="properties" type="tns:Property" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="uiproperties" type="tns:DisplayProperty">
+        <xs:annotation>
+          <xs:documentation>
+                    As of Teamcenter 8.3 when the Object Property Policy flag uIValueOnly is set
+                    the localized property values will be returned in elements of the DisplayProperty type.
+                    </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="props" type="tns:XJProperty">
+        <xs:annotation>
+          <xs:documentation>
+                    As of Teamcenter 9.1.2 and 10.1(???) all property data will be returned in this element vs. properties or
+                    uiproperties. The XJPoperty structure is optimized to support both XML and JSON payloads
+                    and supports any combination of Object Property Policy flags
+                    </xs:documentation>
+          <xs:appinfo>
+            <xjb4c-type>hashmap</xjb4c-type>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="uid" type="xs:string" use="required" />
+    <xs:attribute name="type" type="xs:string" use="optional" />
+    <xs:attribute name="classUid" type="xs:string" use="optional" />
+    <xs:attribute name="className" type="xs:string" use="optional" />
+    <xs:attribute name="updateDesc" type="xs:boolean" use="optional" />
+    <xs:attribute name="objectID" type="xs:string" use="optional" />
+    <xs:attribute name="cParamID" type="xs:string" use="optional" />
+    <xs:attribute name="isHistorical" type="xs:boolean" use="optional" />
+    <xs:attribute name="isObsolete" type="xs:boolean" use="optional" />
+    <xs:attribute name="jbt_addition" type="xs:string" use="optional" />
+  </xs:complexType>
+  <xs:complexType name="ErrorStack">
+    <xs:annotation>
+      <xs:documentation>
+            The ErrorStack contains one or more ErrorValue.
+            Where an operation may have more than one contributing reason for the
+            errror. The ErrorStack may also have an optional UID or Client ID 
+            associated with the error. See the service operation documentation for 
+            specifics of if these optional fields are filled. 
+             </xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="unbounded" name="errorValues" type="tns:ErrorValue" />
+    </xs:sequence>
+    <xs:attribute name="uid" type="xs:string" use="optional" />
+    <xs:attribute name="clientId" type="xs:string" use="optional" />
+    <xs:attribute name="clientIndex" type="xs:integer" use="optional" />
+  </xs:complexType>
+  <xs:complexType name="ErrorValue">
+    <xs:annotation>
+      <xs:documentation>
+            The ErrorValue represents a single error.
+            The error includes a code (a unique number indentifying the error),
+            a severity level(1,2, or 3) and the message describing the error. The
+            message is in the local of the server. 
+            </xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="code" type="xs:integer" use="required" />
+    <xs:attribute name="level" type="xs:integer" use="required" />
+    <xs:attribute name="message" type="xs:string" use="optional" />
+  </xs:complexType>
+  <xs:complexType name="PropDescriptor">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="propDependants" type="tns:PropDependant" />
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string" use="required" />
+    <xs:attribute name="uiname" type="xs:string" use="required" />
+    <xs:attribute name="typeUid" type="xs:string" use="required" />
+    <xs:attribute name="lovUid" type="xs:string" use="optional" />
+    <xs:attribute name="lovTypeUid" type="xs:string" use="optional" />
+    <xs:attribute name="type" type="xs:integer" use="required" />
+    <xs:attribute name="ptype" type="xs:integer" use="required" />
+    <xs:attribute name="attachedSpecifier" type="xs:integer" use="optional" />
+    <xs:attribute name="maxLength" type="xs:integer" use="optional" />
+    <xs:attribute name="displayable" type="xs:boolean" use="required" />
+    <xs:attribute name="anArray" type="xs:boolean" use="required" />
+    <xs:attribute name="required" type="xs:boolean" use="optional" />
+    <xs:attribute name="enabled" type="xs:boolean" use="optional" />
+    <xs:attribute name="modifiable" type="xs:boolean" use="required" />
+    <xs:attribute name="maxArraySize" type="xs:integer" use="optional" />
+  </xs:complexType>
+  <xs:complexType name="Attrib">
+    <xs:attribute name="uid" type="xs:string" use="required" />
+    <xs:attribute name="name" type="xs:string" use="required" />
+    <xs:attribute name="type" type="xs:integer" use="required" />
+    <xs:attribute name="uiName" type="xs:string" use="optional" />
+    <xs:attribute name="maxLength" type="xs:integer" use="optional" />
+    <xs:attribute name="refClassUid" type="xs:string" use="optional" />
+    <xs:attribute name="descriptors" type="xs:integer" use="required" />
+  </xs:complexType>
+  <xs:complexType name="Property">
+    <xs:annotation>
+      <xs:documentation>
+            The Property represents a single property on ModelObject.
+            The property data inclues the name of the property, the value(s) and UI or 
+            display value(s). The modifiable flag overrides the modifiable flag on the
+            coresponding Property Descriptor for this single instnace of the Property.
+            </xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="values" type="tns:PropertyValue" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="uiValues" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>
+                   As of Teamcenter 8.2 localized values of a multi-valued property are returned as an 
+                   array of strings vs. a comma separated values in a single string. The uiValues
+                   will be empty when the Object Property Policy flag excludeUiValues is enabled.
+                   </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string" use="required" />
+    <xs:attribute name="uiValue" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation>
+                As of Teamcenter 2007.1.4 the uiValue is optional and will not be set when the
+                Object Property Policy flag excludeUiValues is enabled.
+                </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="modifiable" type="xs:boolean" use="optional">
+      <xs:annotation>
+        <xs:documentation>
+                As of Teamcenter 2007.1.4 the modifiable flag is optional. This flag will only be set 
+                when the Object Property Policy flag includeIsModifiable is enabled.
+                </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="PropertyValue">
+    <xs:attribute name="value" type="xs:string" use="required" />
+    <xs:attribute name="isNull" type="xs:boolean" use="optional">
+      <xs:annotation>
+        <xs:documentation>
+                    This flag is only set when the property is actually null. If not present the
+                    property value is assumed to be NOT null.
+            </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="PropDependant">
+    <xs:attribute name="name" type="xs:string" use="required" />
+  </xs:complexType>
+  <xs:complexType name="DisplayProperty">
+    <xs:annotation>
+      <xs:documentation>
+            The DisplayProperty represents a single property on ModelObject.
+            The DisplayProperty is used when the uIValueOnly flag is used
+            in Object Property Policy.
+        </xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="uiValues" type="xs:string" />
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string" use="required" />
+  </xs:complexType>
+  <xs:complexType name="XJProperty">
+    <xs:annotation>
+      <xs:documentation>
+                The XJProperty represents a single property on a ModelObject. The XJProperty is 
+                optimized for serialization to XML and JSON, and is capable of handling any 
+                combination of Object Property Policy flags, and single valued or multi-valued properties.
+            </xs:documentation>
+      <xs:appinfo>
+        <xjb4c-hashmap>
+          <key>name</key>
+          <value>value</value>
+        </xjb4c-hashmap>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="value" type="tns:XJPropertyValue" />
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string" use="required" />
+  </xs:complexType>
+  <xs:complexType name="XJPropertyValue">
+    <xs:annotation>
+      <xs:documentation>
+                The XJPropertyValue represents the value(s) of a single property on a
+                ModelObject.
+            </xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="dbValues" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>
+                    The DB or Real value(s) of the property.
+                    When the Object Property Poliyc falg uIValueOnly is enabled this array will 
+                    be empty. The content is always string data regardless of the Property type 
+                    (int,float,date,string .etc) The value is serialized to a string using the 
+                    XSD/XML standards: 
+                        boolean:    '1' or '0'
+                        date:       yyyy-MM-dd'T'HH:mm:ssZ
+                        double:     Scientific or Standard notation, always a US decimal point (never a decimal comma)
+                        float:      Scientific or Standard notation, always a US decimal point (never a decimal comma)
+                        Tag/BO:     UID string
+                    </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="uiValues" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>
+                    The Display or Localized value(s) of the property.
+                    When the Object Property Poliyc falg excludeUiValues is enabled this array will 
+                    be empty. The uIValueOnly flag takes precidence over the excludeUiValues flag.
+                    </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="isNulls" type="xs:boolean">
+        <xs:annotation>
+          <xs:documentation>
+                    True if a property value is null. This array is filled only when one or more 
+                    values is actually null. If not present all values are assumed to be NOT null.
+                </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="modifiable" type="xs:boolean" use="optional">
+      <xs:annotation>
+        <xs:documentation>
+                The modifiable flag overrides the modifiable flag on the coresponding 
+                Property Descriptor for this single instnace of the Property.
+                This flag will only be set when the Object Property Policy flag includeIsModifiable
+                is enabled.
+                </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="TextInfo">
+    <xs:annotation>
+      <xs:documentation>
+            Simple structure to hold a text value and its coresponding display( localized) version.
+             </xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="name" type="xs:string" use="required" />
+    <xs:attribute name="displayValue" type="xs:string" use="required" />
+  </xs:complexType>
+  <xs:element name="CreateInput" type="tns:CreateInput" />
+  <xs:complexType name="CreateInput">
+    <xs:annotation>
+      <xs:documentation><![CDATA[
+                <i>"CreateInput"</i> is a structure used to capture the inputs required for creation of a business object. 
+                This is a recursive structure containing the <i>compoundCreateInput</i> (s) for any secondary (compounded) objects that might be created (e.g <i>Item</i> also creates <i>ItemRevision</i> and <i>ItemMasterForm</i> etc.).
+            ]]></xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="propertyNameValues" type="tns:PropertyNameValues" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="compoundCreateInput" type="tns:CompoundProperty" />
+    </xs:sequence>
+    <xs:attribute name="boName" type="xs:string" use="required" />
+  </xs:complexType>
+  <xs:complexType name="PropertyNameValues">
+    <xs:annotation>
+      <xs:documentation><![CDATA[
+        Map (string/list of strings)  of property name (key) and to property values (values) in string format, to be set on new object being created. 
+        Note: The calling client is responsible for converting the different property types (int, float, date .etc) to a string using the appropriate function(s) in the client framework Property class (i.e. Property.toDateString).
+                    ]]></xs:documentation>
+      <xs:appinfo>
+        <xjb4c-hashmap>
+          <key>key</key>
+          <value>value</value>
+        </xjb4c-hashmap>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="value" type="xs:string" />
+    </xs:sequence>
+    <xs:attribute name="key" type="xs:string" use="required" />
+  </xs:complexType>
+  <xs:complexType name="CompoundProperty">
+    <xs:annotation>
+      <xs:documentation><![CDATA[
+                  <i>CreateInput</i> (s) for compounded objects.
+                    ]]></xs:documentation>
+      <xs:appinfo>
+        <xjb4c-hashmap>
+          <key>key</key>
+          <value>value</value>
+        </xjb4c-hashmap>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="value" type="tns:CreateInput" />
+    </xs:sequence>
+    <xs:attribute name="key" type="xs:string" use="required" />
+  </xs:complexType>
+</xs:schema>

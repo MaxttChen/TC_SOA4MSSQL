@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema xmlns:tns="http://teamcenter.com/webservices/2005-06/schemas/WSFaults" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://teamcenter.com/webservices/2005-06/schemas/WSFaults" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:annotation>
+    <xsd:documentation>
+    	    Teamcenter Web Services (2005-06)
+        This schema contains elements used as SOAP Faults 
+    </xsd:documentation>
+  </xsd:annotation>
+  <xsd:element name="RequestManangerFault" type="tns:RequestManangerFaultType" />
+  <xsd:complexType name="RequestManangerFaultType">
+    <xsd:annotation>
+      <xsd:documentation>
+      		The RequestManangerFault element is used to map any exception thrown 
+      		in the Presentation Tier or Enterprise Tier during the processing
+      		of a Web Service request
+      
+			Elements:
+      		RootException: The exception class that was orgininaly thrown
+      					   i.e. "java.io.IOException"
+ 
+			Message:	  The localized error message that is suiteable for
+						  display to the user.
+      		</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="RootException" type="xsd:string" />
+      <xsd:element name="Message" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>

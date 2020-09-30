@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DiscoveryClientResultsFile xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Results>
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="file:///F:/TC/TC/培训/soa_client/wsdls/WSFaults.xsd" filename="WSFaults.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.ContractReference" url="file:///F:/TC/TC/培训/soa_client/wsdls/Core2001DataManagementService.wsdl" filename="Core2001DataManagementService.wsdl" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="file:///F:/TC/TC/培训/soa_client/wsdls/SoaBase.xsd" filename="SoaBase.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="file:///F:/TC/TC/培训/soa_client/wsdls/SoaExceptions.xsd" filename="SoaExceptions.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="file:///F:/TC/TC/培训/soa_client/wsdls/Core2001DataManagement.xsd" filename="Core2001DataManagement.xsd" />
+  </Results>
+</DiscoveryClientResultsFile>

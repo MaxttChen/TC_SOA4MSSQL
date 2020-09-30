@@ -1,0 +1,9 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="TCSOA4MSSQL.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="TCSOA4MSSQL_WebReference_Core2001DataManagementService" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://localhost:80/PTierApp/WebServices/Core-2020-01-DataManagement</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
