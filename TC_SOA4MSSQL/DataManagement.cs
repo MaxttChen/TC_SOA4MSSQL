@@ -59,13 +59,13 @@ namespace TC_SOA_cmd
                 ItemProperties itemProperty = new ItemProperties();
 
                 itemProperty.ClientId = "Maxtt-Test-demo10";   //物料名称
-                itemProperty.ItemId = "000090";   //物料代码
+                itemProperty.ItemId = "000092";   //物料代码
                 itemProperty.RevId = "00";    //版本
                 itemProperty.Name = "Maxtt-Test";    //物料名称
                 itemProperty.Type = itemType;   //创建ITEM的类型
                 itemProperty.Description = "Test Item for the SOA AppX sample application.Hello";    //描述
                 //test
-                itemProperty.Uom = "Each";  //单位
+                itemProperty.Uom = "PCS";  //单位
 
                 //增加额外属性
                 itemProperty.ExtendedAttributes = new ExtendedAttributes[2];   //增加多少个？
@@ -87,7 +87,6 @@ namespace TC_SOA_cmd
 
                 
 
-
                 //链接服务器创建
                 CreateItemsResponse response = dmService.CreateItems(new ItemProperties[] { itemProperty }, null, "");
 
@@ -95,8 +94,14 @@ namespace TC_SOA_cmd
                 ModelObject itemObj = findModel("Item ID", new string[] { "Item ID" }, new string[] { itemProperty.ItemId });
                 ModelObject itemReversion = findModel("MY_WEB_ITEM_REVISION", new string[] { "iid", "vid" }, new string[] { itemProperty.ItemId, itemProperty.RevId });
 
-                changeOnwer("maxtt", "项目管理", itemObj);
-                changeOnwer("maxtt", "项目管理", itemReversion);
+                //changeOnwer("maxtt", "项目管理", itemObj);
+                //changeOnwer("maxtt", "项目管理", itemReversion);
+
+                //新增版本
+                reviseItem(itemReversion);
+                
+
+                //deleteItems_single(itemReversion);
 
             }
             catch (ServiceException e)
@@ -134,7 +139,7 @@ namespace TC_SOA_cmd
 
 
 
-                //// Reserve revision IDs and revise the Items
+                // Reserve revision IDs and revise the Items
                 //Hashtable allRevIds = generateRevisionIds(items);
                 //reviseItems(allRevIds, itemRevs);
 
@@ -249,7 +254,7 @@ namespace TC_SOA_cmd
                 Property property = null;
                 try
                 {
-                    property = forms[0].GetProperty("owning_user");
+                    property = forms[0].GetProperty("project_id");
                 }
                 catch (NotLoadedException /*ex*/) { }
 
@@ -263,7 +268,7 @@ namespace TC_SOA_cmd
                     ExtendedAttributes theExtendedAttr = new ExtendedAttributes();
                     theExtendedAttr.Attributes = new Hashtable();
                     theExtendedAttr.ObjectType = formTypes[0];
-                    theExtendedAttr.Attributes["owning_user"] = "infodba";
+                    theExtendedAttr.Attributes["project_id"] = "project_id";
 
                     itemProperty.ExtendedAttributes[0] = theExtendedAttr;
                 }
@@ -289,15 +294,16 @@ namespace TC_SOA_cmd
             return response.Output;
         }
 
-        /**
-         * Reserve Revision IDs
-         *
-         * @param items       Array of Items to reserve Ids for
-         *
-         * @return Map of RevisionIds
-         *
-         * @throws ServiceException  If any partial errors are returned
-         */
+
+            /**
+             * Reserve Revision IDs
+             *
+             * @param items       Array of Items to reserve Ids for
+             *
+             * @return Map of RevisionIds
+             *
+             * @throws ServiceException  If any partial errors are returned
+            */
         public Hashtable generateRevisionIds(Item[] items) //throws ServiceException
         {
             // Get the service stub
@@ -344,6 +350,8 @@ namespace TC_SOA_cmd
             DataManagementService dmService = DataManagementService.getService(Session.getConnection());
 
 
+            
+
             ReviseInfo[] reviseInfo = new ReviseInfo[itemRevs.Length];
             for (int i = 0; i < itemRevs.Length; i++)
             {
@@ -357,6 +365,8 @@ namespace TC_SOA_cmd
                 reviseInfo[i].Name = "testRevise";
                 reviseInfo[i].NewRevId = rev.NewRevId;
             }
+
+            
 
             // *****************************
             // Execute the service operation
@@ -376,6 +386,43 @@ namespace TC_SOA_cmd
 
         }
 
+
+        public void reviseItem(ModelObject obj) //throws ServiceException
+        {
+
+            DataManagementService dmService = DataManagementService.getService(Session.getConnection());
+            ReviseInfo rev = new ReviseInfo();
+            rev.BaseItemRevision = new ItemRevision(null,obj.Uid);
+            rev.ClientId = "Maxtt_Test" + "--" + "01";
+            rev.Description = "describe testRevise";
+            rev.Name = "testRevise";
+            rev.NewRevId = "01";
+            
+            //额外的表单属性
+            PropertyNameValueInfo info = new PropertyNameValueInfo();
+            info.PropertyName = "object_desc";
+            info.PropertyValues = new string[] { "newid1" };
+            
+            rev.NewItemRevisionMasterProperties.PropertyValueInfo = new PropertyNameValueInfo[] { info };
+            //rev.NewItemRevisionMasterProperties.Form = new Teamcenter.Soa.Client.Model.Strong.Form(null, obj.Uid);
+
+            // *****************************
+            // Execute the service operation
+            // *****************************
+            ReviseResponse2 revised = dmService.Revise2(new ReviseInfo[] { rev });
+            // before control is returned the ChangedHandler will be called with
+            // newly created Item and ItemRevisions
+
+
+
+            // The AppXPartialErrorListener is logging the partial errors returned
+            // In this simple example if any partial errors occur we will throw a
+
+            // ServiceException
+            if (revised.ServiceData.sizeOfPartialErrors() > 0)
+                throw new ServiceException("DataManagementService.revise returned a partial error.");
+        }
+
         /**
          * Delete the Items
          *
@@ -393,6 +440,25 @@ namespace TC_SOA_cmd
             // *****************************
             ServiceData serviceData = dmService.DeleteObjects(items);
             
+
+            // The AppXPartialErrorListener is logging the partial errors returned
+            // In this simple example if any partial errors occur we will throw a
+            // ServiceException
+            if (serviceData.sizeOfPartialErrors() > 0)
+                throw new ServiceException("DataManagementService.deleteObjects returned a partial error.");
+
+        }
+
+        public void deleteItems_single(ModelObject items) //throws ServiceException
+        {
+            // Get the service stub
+            DataManagementService dmService = DataManagementService.getService(Session.getConnection());
+
+            // *****************************
+            // Execute the service operation
+            // *****************************
+            ServiceData serviceData = dmService.DeleteObjects(new ModelObject[] { items });
+
 
             // The AppXPartialErrorListener is logging the partial errors returned
             // In this simple example if any partial errors occur we will throw a
@@ -556,6 +622,7 @@ namespace TC_SOA_cmd
 
 
             ServiceData returnData = dmService.ChangeOwnership(ownerData);
+
             if (returnData.sizeOfPartialErrors() > 0)
             {
 
