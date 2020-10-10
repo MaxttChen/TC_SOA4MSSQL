@@ -6,6 +6,7 @@ using System.Text;
 using Teamcenter.ClientX;
 using User = Teamcenter.Soa.Client.Model.Strong.User;
 
+
 namespace TC_SOA_cmd
 {
     class Program
@@ -26,6 +27,8 @@ namespace TC_SOA_cmd
                 // Establish a session with the Teamcenter Server
                 User user = session.login();
 
+                Session2 session2 = new Session2(serverHost);
+                User user2 = session2.login();
                 //// Using the User object returned from the login service request
                 //// display the contents of the Home Folder
                 //home.listHomeFolder(user);
@@ -36,6 +39,7 @@ namespace TC_SOA_cmd
                 // Perform some basic data management functions
                 //dm.createReviseAndDelete();
                 dm.createMyItem("Item");
+                
 
                 //dm.queryItems();
                 // Terminate the session with the Teamcenter server

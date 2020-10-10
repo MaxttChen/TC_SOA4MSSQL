@@ -40,6 +40,8 @@ using Teamcenter.Soa.Exceptions;
 using Item = Teamcenter.Soa.Client.Model.Strong.Item;
 using ItemRevision = Teamcenter.Soa.Client.Model.Strong.ItemRevision;
 using Teamcenter.Services.Strong.Query._2007_06.SavedQuery;
+using Teamcenter.Services.Strong.Workflow;
+using Teamcenter.Services.Strong.Workflow._2008_06.Workflow;
 
 namespace TC_SOA_cmd
 {
@@ -90,26 +92,75 @@ namespace TC_SOA_cmd
                 //链接服务器创建
                 CreateItemsResponse response = dmService.CreateItems(new ItemProperties[] { itemProperty }, null, "");
 
-                //修改ITEM所有者
+                //调用查询构建器，查询ITEM和ITEMRevision
                 ModelObject itemObj = findModel("Item ID", new string[] { "Item ID" }, new string[] { itemProperty.ItemId });
                 ModelObject itemReversion = findModel("MY_WEB_ITEM_REVISION", new string[] { "iid", "vid" }, new string[] { itemProperty.ItemId, itemProperty.RevId });
 
+
+                //修改ITEM所有者
                 //changeOnwer("maxtt", "项目管理", itemObj);
                 //changeOnwer("maxtt", "项目管理", itemReversion);
 
-                //新增版本
-                reviseItem(itemReversion);
-                
+                //新增版本--不能修改所有者不是infodba用户的ITEM
+                //reviseItem(itemReversion);
+
+                //修改原有的版本
+
 
                 //deleteItems_single(itemReversion);
 
+                //发布流程
+                wf("MyRelease",itemReversion);
+
             }
-            catch (ServiceException e)
+            //catch (ServiceException e)
+            catch (Exception e)
             {
                 System.Console.Out.WriteLine(e.Message);
             }
 
 
+        }
+
+        public void wf(String wfTemplate,ModelObject obj)
+        {
+
+            //connection -> TC connection objects
+            //WorkflowService is from package com.teamcenter.services.strong.workflow
+            WorkflowService wfService = WorkflowService.getService(Session2.getConnection());
+
+            if (wfService == null)
+            {
+                throw new Exception("The workflow service not found in Teamcenter.");
+            }
+
+            String[] arrObjectUID = new String[] { obj.Uid };
+            int[] arrTypes = new int[arrObjectUID.Length];
+            arrTypes[0] = 1;
+            //Arrays.fill(arrTypes, 1);//Target attachment type to be initialized for all UIDs
+
+
+            ContextData contextData = new ContextData();
+            contextData.AttachmentCount = arrObjectUID.Length;//
+            contextData.Attachments = arrObjectUID;//List of UID of objects to submit to workflow
+            contextData.AttachmentTypes = arrTypes; //Types of attachment  EPM_target_attachment (target attachment) and EPM_reference_attachment (reference attachment).
+            contextData.ProcessTemplate = wfTemplate;//"ReleaseObjectsWorkflow";
+            
+            //processname -> Name by which initiated workflow appear in the user mail box .
+            //processDescription -> Description for the initiated workflow
+            InstanceInfo instanceResponse = wfService.CreateInstance(true, null, "processName-maxtt-demo", null, "processDescription-maxtt-demo", contextData);
+
+            if (instanceResponse.ServiceData.sizeOfPartialErrors() == 0)
+            {
+                //System.out.println("Process created Successfully");
+            }
+            else
+            {
+                //System.out.println("Error :" + instanceResponse.serviceData.getPartialError(0).getMessages());
+                //System.out.println("Error :" + instanceResponse.serviceData.getPartialError(0).getErrorValues());
+                //throw new Exception("Submit To Workflow: 001", "Submit To Workflow - " + instanceResponse.ServiceData.GetPartialError(0).GetMessages()[0]);
+                throw new Exception("Submit To Workflow: 001"+ "Submit To Workflow - ");
+            }
         }
 
         /**
